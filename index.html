@@ -1,16 +1,47 @@
+mkdir my-io-game
+cd my-io-game
+npm init -y
+npm install express socket.io
+my-io-game/
+├── server.js
+├── package.json
+└── public/
+    └── index.html
+const express = require('express');
+const app = express();
+const http = require('http').createServer(app);
+const io = require('socket.io')(http);
+
+const PORT = process.env.PORT || 3000;
+
+app.use(express.static('public'));
+
+io.on('connection', (socket) => {
+  console.log('A user connected: ' + socket.id);
+
+  socket.on('disconnect', () => {
+    console.log('User disconnected: ' + socket.id);
+  });
+});
+
+http.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Open Discord</title>
+  <title>My .io Game</title>
 </head>
 <body>
-  <h1>Click below to open Discord</h1>
-  <button onclick="openDiscord()">Open Discord in new tab</button>
-
+  <h1>Welcome to My .io Game</h1>
+  <script src="/socket.io/socket.io.js"></script>
   <script>
-    function openDiscord() {
-      window.open("https://discord.com/app", "_blank");
-    }
+    const socket = io();
   </script>
 </body>
 </html>
+git init
+git add .
+git commit -m "Initial .io game setup"
+gh repo create my-io-game --public --source=. --remote=origin
+git push -u origin main
